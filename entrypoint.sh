@@ -17,6 +17,9 @@ fi
 
 FILE="$1"
 
+mkdir assets
+cd assets
+
 asset_id=$(jq ".release.assets | map(select(.name == \"$FILE\"))[0].id" $GITHUB_EVENT_PATH)
 if [ "$asset_id" = "null" ]; then
   echo "ERROR: asset id not found"
@@ -32,3 +35,5 @@ curl \
   -H "Accept:application/octet-stream" \
   -o "${FILE}" \
   "${ASSET_URL}"
+
+unzip "${FILE}"
