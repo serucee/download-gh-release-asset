@@ -17,9 +17,6 @@ fi
 
 FILE="$1"
 
-mkdir /github/workspace/assets
-cd /github/workspace/assets
-
 asset_id=$(jq ".release.assets | map(select(.name == \"$FILE\"))[0].id" $GITHUB_EVENT_PATH)
 if [ "$asset_id" = "null" ]; then
   echo "ERROR: asset id not found"
@@ -36,4 +33,6 @@ curl \
   -o "${FILE}" \
   "${ASSET_URL}"
 
-unzip "${FILE}"
+
+mkdir /github/workspace/assets
+unzip "${FILE}" -d /github/workspace/assets
